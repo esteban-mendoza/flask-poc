@@ -5,24 +5,23 @@ from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 
 from db import stores
+from schemas import StoreSchema, StoreUpdateSchema
 
 blp = Blueprint("stores", __name__, description="Operations on stores")
 
 
 @blp.route("/store/<string:store_id>")
 class Store(MethodView):
+    @blp.response(StoreSchema)
     def get(self, store_id):
         try:
             return stores[store_id]
         except KeyError:
             abort(404, message="Store not found.")
 
-    def put(self, store_id):
-        store_data = request.get_json()
-        # Schema validation
-        if "name" not in store_data:
-            abort(400, message="Missing required field: 'name'.")
-
+    @blp.arguments(StoreUpdateSchema)
+    @blp.response(StoreSchema)
+    def put(self, store_data, store_id):
         try:
             store = stores[store_id]
             store.update(store_data)
@@ -40,15 +39,13 @@ class Store(MethodView):
 
 @blp.route("/store")
 class StoreList(MethodView):
+    @blp.response(StoreSchema(many=True))
     def get(self):
-        return {"stores": list(stores.values())}
+        return stores.values()
 
-    def post(self):
-        store_data = request.get_json()
-        # Schema validation
-        if "name" not in store_data:
-            abort(400, message="Missing required field: 'name'.")
-
+    @blp.arguments(StoreSchema)
+    @blp.response(201, StoreSchema)
+    def post(self, store_data):
         # Uniqueness validation
         for store in stores.values():
             if store["name"] == store_data["name"]:
