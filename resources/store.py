@@ -12,7 +12,7 @@ blp = Blueprint("stores", __name__, description="Operations on stores")
 
 @blp.route("/store/<string:store_id>")
 class Store(MethodView):
-    @blp.response(StoreSchema)
+    @blp.response(200, StoreSchema)
     def get(self, store_id):
         try:
             return stores[store_id]
@@ -20,7 +20,7 @@ class Store(MethodView):
             abort(404, message="Store not found.")
 
     @blp.arguments(StoreUpdateSchema)
-    @blp.response(StoreSchema)
+    @blp.response(200, StoreSchema)
     def put(self, store_data, store_id):
         try:
             store = stores[store_id]
@@ -39,7 +39,7 @@ class Store(MethodView):
 
 @blp.route("/store")
 class StoreList(MethodView):
-    @blp.response(StoreSchema(many=True))
+    @blp.response(200, StoreSchema(many=True))
     def get(self):
         return stores.values()
 
@@ -52,6 +52,6 @@ class StoreList(MethodView):
                 abort(400, message="Store already exists.")
 
         store_id = uuid.uuid4().hex
-        store = {**store_data, "id": store_id}
+        store = {**store_data, "store_id": store_id}
         stores[store_id] = store
         return store
