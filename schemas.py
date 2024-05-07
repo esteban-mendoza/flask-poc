@@ -53,5 +53,5 @@ class TagSchema(PlainTagSchema):
 
 class ItemsTagsSchema(Schema):
     message = Str()
-    item_id = Nested(ItemSchema())
-    tag_id = Nested(TagSchema())
+    item = Nested(ItemSchema())
+    tag = Nested(TagSchema())

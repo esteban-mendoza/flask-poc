@@ -56,3 +56,11 @@ class Tag(MethodView):
             return {"message": f"Tag {tag_id} deleted."}
         except SQLAlchemyError as e:
             abort(500, message=f"An error occurred while deleting the tag: {e}")
+
+
+@blp.route("/tag")
+class TagList(MethodView):
+
+    @blp.response(200, TagSchema(many=True))
+    def get(self):
+        return TagModel.query.all()
