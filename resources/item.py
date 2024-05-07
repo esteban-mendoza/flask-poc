@@ -3,13 +3,13 @@ from flask_smorest import Blueprint, abort
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
 from db import db
-from models.item import ItemModel
-from schemas import ItemSchema, ItemUpdateSchema
+from models import ItemModel, TagModel
+from schemas import ItemSchema, ItemsTagsSchema, ItemUpdateSchema
 
 blp = Blueprint("items", __name__, description="Operations on items")
 
 
-@blp.route("/item/<string:item_id>")
+@blp.route("/item/<int:item_id>")
 class Item(MethodView):
     @blp.response(200, ItemSchema)
     def get(self, item_id):
@@ -31,10 +31,10 @@ class Item(MethodView):
             db.session.add(item)
             db.session.commit()
 
-        except IntegrityError:
-            abort(400, message="An item with the same name already exists.")
-        except SQLAlchemyError:
-            abort(500, message="An error occurred while inserting the item.")
+        except IntegrityError as e:
+            abort(400, message=f"An item with the same name already exists. {e}")
+        except SQLAlchemyError as e:
+            abort(500, message=f"An error occurred while inserting the item. {e}")
 
         return item
 
@@ -58,7 +58,46 @@ class ItemList(MethodView):
         try:
             db.session.add(item)
             db.session.commit()
-        except SQLAlchemyError:
-            abort(500, message="An error occurred while inserting the item.")
+        except SQLAlchemyError as e:
+            abort(500, message=f"An error occurred while inserting the item. {e}")
 
         return item
+
+
+@blp.route("/item/<int:item_id>/tag/<int:tag_id>")
+class LinkTagToItem(MethodView):
+
+    @blp.response(201, ItemSchema)
+    def post(self, item_id, tag_id):
+        item = ItemModel.query.get_or_404(item_id)
+        tag = TagModel.query.get_or_404(tag_id)
+
+        item.tags.append(tag)
+        try:
+            db.session.add(item)
+            db.session.commit()
+        except SQLAlchemyError as e:
+            abort(
+                500, message=f"An error occurred while linking the tag to the item: {e}"
+            )
+        return item
+
+    @blp.response(200, ItemsTagsSchema)
+    def delete(self, item_id, tag_id):
+        item = ItemModel.query.get_or_404(item_id)
+        tag = TagModel.query.get_or_404(tag_id)
+
+        item.tags.remove(tag)
+        try:
+            db.session.add(item)
+            db.session.commit()
+        except SQLAlchemyError as e:
+            abort(
+                500,
+                message=f"An error occurred while unlinking tag {tag_id} from item {item_id}: {e}",
+            )
+        return {
+            "message": f"Tag {tag_id} removed from item {item_id}.",
+            "item": item,
+            "tag": tag,
+        }

@@ -9,7 +9,7 @@ from schemas import StoreSchema, StoreUpdateSchema
 blp = Blueprint("stores", __name__, description="Operations on stores")
 
 
-@blp.route("/store/<string:store_id>")
+@blp.route("/store/<int:store_id>")
 class Store(MethodView):
     @blp.response(200, StoreSchema)
     def get(self, store_id):
@@ -30,10 +30,10 @@ class Store(MethodView):
         try:
             db.session.add(store)
             db.session.commit()
-        except IntegrityError:
-            abort(400, message="A store with the same name already exists.")
-        except SQLAlchemyError:
-            abort(500, message="An error occurred while inserting the store.")
+        except IntegrityError as e:
+            abort(400, message=f"A store with the same name already exists. {e}")
+        except SQLAlchemyError as e:
+            abort(500, message=f"An error occurred while inserting the store. {e}")
 
         return store
 
@@ -58,9 +58,9 @@ class StoreList(MethodView):
         try:
             db.session.add(store)
             db.session.commit()
-        except IntegrityError:
-            abort(400, message="A store with the same name already exists.")
-        except SQLAlchemyError:
-            abort(500, message="An error occurred while inserting the store.")
+        except IntegrityError as e:
+            abort(400, message=f"A store with the same name already exists. {e}")
+        except SQLAlchemyError as e:
+            abort(500, message=f"An error occurred while inserting the store. {e}")
 
         return store
