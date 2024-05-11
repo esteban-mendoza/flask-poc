@@ -1,15 +1,20 @@
 import os
 
+from dotenv import load_dotenv
 from flask import Flask
 from flask_smorest import Api
 
 from db import db
+from middleware.authentication import JWTManager
+from middleware.blocklist import BLOCKLIST
 from resources.item import blp as ItemBlueprint
 from resources.store import blp as StoreBlueprint
 from resources.tag import blp as TagBlueprint
+from resources.user import blp as UserBlueprint
 
 
 def create_app(db_uri=None):
+    load_dotenv()
     app = Flask(__name__)
 
     app.config["PROPAGATE_EXCEPTIONS"] = True
@@ -32,11 +37,16 @@ def create_app(db_uri=None):
     with app.app_context():
         db.create_all()
 
+    # JWT setup
+    app.config["JWT_SECRET_KEY"] = os.environ["JWT_SECRET_KEY"]
+    jwt = JWTManager(app)
+
     # Registering blueprints
     api = Api(app)
 
     api.register_blueprint(ItemBlueprint)
     api.register_blueprint(StoreBlueprint)
     api.register_blueprint(TagBlueprint)
+    api.register_blueprint(UserBlueprint)
 
     return app
