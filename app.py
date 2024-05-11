@@ -2,6 +2,7 @@ import os
 
 from dotenv import load_dotenv
 from flask import Flask
+from flask_migrate import Migrate
 from flask_smorest import Api
 
 from db import db
@@ -34,8 +35,8 @@ def create_app(db_uri=None):
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.init_app(app)
 
-    with app.app_context():
-        db.create_all()
+    # Migrate setup
+    migrate = Migrate(app, db)
 
     # JWT setup
     app.config["JWT_SECRET_KEY"] = os.environ["JWT_SECRET_KEY"]
