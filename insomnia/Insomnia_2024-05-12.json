@@ -1,7 +1,7 @@
 {
     "_type": "export",
     "__export_format": 4,
-    "__export_date": "2024-05-11T04:49:46.988Z",
+    "__export_date": "2024-05-12T22:27:36.335Z",
     "__export_source": "insomnia.desktop.app:v9.1.1",
     "resources": [
         {
@@ -199,7 +199,7 @@
         {
             "_id": "req_7cf14a6375584797b7ef7ad34eedd534",
             "parentId": "fld_43c425f65a50476293d0f742cc5bf06a",
-            "modified": 1715401163630,
+            "modified": 1715461636412,
             "created": 1715379093407,
             "url": "{{url}}/refresh",
             "name": "/refresh Get a non-fresh token",
@@ -216,7 +216,7 @@
             ],
             "authentication": {
                 "type": "bearer",
-                "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxNTQwMTA3OCwianRpIjoiZDBhMDEzY2QtNmMxZC00NmUwLTlkOTMtOTFlYTM0YzdjMTE3IiwidHlwZSI6InJlZnJlc2giLCJzdWIiOjEsIm5iZiI6MTcxNTQwMTA3OCwiY3NyZiI6IjhhZmFhNGRmLWY0ZWQtNDRjOC05NzU0LTFlOTAzOGNkMjY4NyIsImV4cCI6MTcxNzk5MzA3OH0.-Q7aJPv9fo7NOO9zKICojmyv-tXoYqG9PRv34L6bXZ8"
+                "token": "{{refresh_token}}"
             },
             "metaSortKey": -1715379093407,
             "isPrivate": false,
@@ -371,7 +371,7 @@
         {
             "_id": "req_bfde65a6b459471cb6926f37a59f63e0",
             "parentId": "fld_0e390229852442c6ae9e164a298a883c",
-            "modified": 1715350618482,
+            "modified": 1715461511781,
             "created": 1715115009919,
             "url": "{{url}}/item/1/tag/1",
             "name": "link tag to item",
@@ -388,7 +388,7 @@
             ],
             "authentication": {
                 "type": "bearer",
-                "token": "{{jwt}}"
+                "token": ""
             },
             "metaSortKey": -1715115009919,
             "isPrivate": false,
@@ -525,7 +525,7 @@
         {
             "_id": "req_633456ee19fa4fe1abb9c787c6d00f3b",
             "parentId": "fld_7af6203597fa4d1b835d719f254232a4",
-            "modified": 1715350638296,
+            "modified": 1715461506217,
             "created": 1714774574814,
             "url": "{{ url }}/item",
             "name": "create item in store",
@@ -556,7 +556,7 @@
             ],
             "authentication": {
                 "type": "bearer",
-                "token": "{{jwt}}"
+                "token": ""
             },
             "metaSortKey": -1714843243163,
             "isPrivate": false,
@@ -893,27 +893,6 @@
             "name": "Default Jar",
             "cookies": [],
             "_type": "cookie_jar"
-        },
-        {
-            "_id": "env_98e7f0c2a1934c03b0001eb9fb89a30a",
-            "parentId": "env_48c3211125e180790fb3e7897edd8627df3765c3",
-            "modified": 1715367258534,
-            "created": 1714846405885,
-            "name": "dev",
-            "data": {
-                "url": "http://127.0.0.1:55000",
-                "access_token": "{% response 'body', 'req_734e4fdc44fa4d97b4d118ab142e0396', 'b64::JC5hY2Nlc3NfdG9rZW4=::46b', 'when-expired', 300 %}"
-            },
-            "dataPropertyOrder": {
-                "&": [
-                    "url",
-                    "access_token"
-                ]
-            },
-            "color": null,
-            "isPrivate": true,
-            "metaSortKey": 1714846405885,
-            "_type": "environment"
         }
     ]
 }
