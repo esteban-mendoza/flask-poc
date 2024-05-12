@@ -39,7 +39,7 @@ def create_app(db_uri=None):
     migrate = Migrate(app, db)
 
     # JWT setup
-    app.config["JWT_SECRET_KEY"] = os.environ["JWT_SECRET_KEY"]
+    app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
     jwt = JWTManager(app)
 
     # Registering blueprints
