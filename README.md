@@ -9,7 +9,8 @@ This project is a proof of concept of a REST API in Flask, it:
 - uses Alembic for data migrations,
 - implements development and production configurations,
 - uses Docker Compose for local development,
-- uses Swagger for API documentation.
+- Swagger for API documentation,
+- Gunicorn as a WSGI production server.
 
 ## Get started
 
